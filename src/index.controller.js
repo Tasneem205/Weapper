@@ -13,7 +13,7 @@ router.get("/historical/{location}", () => {});
 
 router.get("/alerts/{location}", () => {});
 
-router.get("/locations/saved", () => {});
+router.get("/locations/saved", locationFunctions.getSavedLocations);
 router.post("/locations/:location/save", locationFunctions.saveLocation);
 
 router.get("/settings", () => {});

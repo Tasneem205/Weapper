@@ -51,8 +51,8 @@ const getWeatherByLocation = async (req, res) => {
 };
 
 const saveLocation = async (req, res) => {
+    const client = new MongoClient(process.env.URI);
     try {
-        console.log(req.params);
         const {error, value} = locationAndMetricSchema.validate(req.params);
         if (error) return responses.badRequest(res, `validaiton error: ${error}`);
         const { location, unit } = value;
@@ -60,7 +60,6 @@ const saveLocation = async (req, res) => {
         if (!user_id)
             return responses.badRequest(res, "user_id is required.");
 
-        const client = new MongoClient('mongodb://localhost:27017');
         await client.connect();
         if (!client) return responses.internalServerError(res);
         console.log('Connected successfully to MongoDB server');
@@ -89,25 +88,37 @@ const saveLocation = async (req, res) => {
         return responses.internalServerError(res);
     } finally {
         await client.close();
+        console.log('Connection to MongoDB server closed');
     }
 }
 
 const getSavedLocations = async (req, res) => {
+    const client = new MongoClient(process.env.URI);
     try {
-        
+        const { user_id } = req.body;
+        if (!user_id)
+            return responses.badRequest(res, "user_id is required.");
+        await client.connect();
+        if (!client) return responses.internalServerError(res);
+        console.log('Connected successfully to MongoDB server');
+        const db = client.db(process.env.DBName);
+        const userCollection = db.collection('users');
+        let user = await userCollection.findOne({ user_id });
+        if (!user) return responses.notFound(res, "User not found");
+        return responses.success(res, "User locations fetched successfully", user.locations);
     } catch (error) {
         console.log(`Faild getting saved locations look \n${error}`);
         return responses.internalServerError(res);
+    } finally {
+        await client.close();
+        console.log('Connection to MongoDB server closed');
     }
 }
 
 const locationFunctions = {
     getWeatherByLocation,
     saveLocation,
+    getSavedLocations,
 };
 
 export default locationFunctions;
-/*
-router.get("/locations/saved", () => {});
-
-*/
