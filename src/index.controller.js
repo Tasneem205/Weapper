@@ -1,11 +1,12 @@
 import { Router } from "express";
 import locationFunctions from "./services/location.service.js";
+import forecastServices from "./services/forecast.service.js";
 
 const router = new Router();
 
 router.get("/:location", locationFunctions.getWeatherByLocation);
 
-router.get("/forecast/{location}", () => {});
+router.get("/forecast/:location", forecastServices.forecastByLocation);
 router.get("/forecast/daily", () => {});
 router.get("/forecast/hourly", () => {});
 
