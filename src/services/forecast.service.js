@@ -3,7 +3,6 @@ import redisClient from '../middleWares/redisClient.js';
 import responses from '../helper/responses.js';
 import locationAndMetricSchema from '../schemas/locations.schema.js'
 import schemas from '../schemas/forecast.schema.js';
-// import { MongoClient } from 'mongodb';
 
 const forecastByLocation = async (req, res) => {
     const { error, value } = locationAndMetricSchema.validate(req.params);
@@ -24,7 +23,9 @@ const forecastByLocation = async (req, res) => {
         const url = `${process.env.VISUAL_CROSSING_BASE_URL}/${encodeURIComponent(location)}?unitGroup=${unit}&key=${process.env.VISUAL_CROSSING_API_KEY}&include=days&contentType=json`;
 
         const response = await axios.get(url);
-
+        if (!response.data || !response.data.days) { 
+            return responses.notFound(res, 'Failed to fetch weather forecast');
+        }
         const forecast = response.data.days.slice(0, 7).map(day => ({
             date: day.datetime,
             high_temp: day.tempmax,

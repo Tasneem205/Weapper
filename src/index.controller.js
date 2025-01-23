@@ -1,6 +1,7 @@
 import { Router } from "express";
 import locationFunctions from "./services/location.service.js";
 import forecastServices from "./services/forecast.service.js";
+import getHistoricalWeather from "./services/history.service.js";
 
 const router = new Router();
 
@@ -10,7 +11,7 @@ router.get("/forecast/:location", forecastServices.forecastByLocation);
 router.get("/forecast/daily/:location", forecastServices.dailyForecast);
 router.get("/forecast/hourly/:location", forecastServices.hourlyForecast);
 
-router.get("/historical/{location}", () => {});
+router.get("/historical/:location", getHistoricalWeather);
 
 router.get("/alerts/{location}", () => {});
 
