@@ -25,7 +25,7 @@ const getWeatherByLocation = async (req, res) => {
             {
                 params: {
                     key: process.env.VISUAL_CROSSING_API_KEY,
-                    unitGroup: unit === 'metric' ? 'metric' : 'us',
+                    unitGroup: unit,
                 },
             }
         );

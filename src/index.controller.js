@@ -2,6 +2,7 @@ import { Router } from "express";
 import locationFunctions from "./services/location.service.js";
 import forecastServices from "./services/forecast.service.js";
 import getHistoricalWeather from "./services/history.service.js";
+import getAlerts from "./services/alerts.service.js";
 
 const router = new Router();
 
@@ -13,7 +14,7 @@ router.get("/forecast/hourly/:location", forecastServices.hourlyForecast);
 
 router.get("/historical/:location", getHistoricalWeather);
 
-router.get("/alerts/{location}", () => {});
+router.get("/alerts/:location", getAlerts);
 
 router.get("/locations/saved", locationFunctions.getSavedLocations);
 router.post("/locations/:location/save", locationFunctions.saveLocation);
