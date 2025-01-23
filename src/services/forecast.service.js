@@ -46,20 +46,23 @@ const forecastByLocation = async (req, res) => {
 
 const dailyForecast = async (req, res) => {
     try {
-        const { error, value } = schemas.daily.validate(req.query);
-        if (error) return responses.badRequest(res, error.message);
-        const { location, days } = value;
-        const cacheKey = `forecast:${location}:${days}`;
+        const { error1, value } = schemas.daily.validate(req.query);
+        if (error1) return responses.badRequest(res, error1.message);
+        // location is in params and the rest are in query
+        const { error2, value: {location} } = locationAndMetricSchema.validate(req.params);
+        if (error2) return responses.badRequest(res, error2.message);
+        const { days, unit } = value;
+        const cacheKey = `forecast:${location}:${unit}:${days}`;
         const cachedData = await redisClient.get(cacheKey);
 
         if (cachedData) {
-            console.log('Cache hit!');
+            console.log('Cache hit! from there');
             return JSON.parse(cachedData);
         }
 
         console.log('Cache miss. Fetching data from Visual Crossing API...');
         const apiKey = process.env.VISUAL_CROSSING_API_KEY;
-        const apiUrl = `${process.env.VISUAL_CROSSING_BASE_URL}/${location}?unitGroup=metric&key=${apiKey}&include=days&elements=datetime,tempmax,tempmin,conditions,windspeed&days=${days}`;
+        const apiUrl = `${process.env.VISUAL_CROSSING_BASE_URL}/${location}?unitGroup=${unit}&key=${apiKey}&include=days&elements=datetime,tempmax,tempmin,conditions,windspeed&days=${days}`;
 
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -88,7 +91,62 @@ const dailyForecast = async (req, res) => {
 };
 
 const hourlyForecast = async (req, res) => {
-
+    console.log('Fetching hourly forecast...');
+    try {
+        const { error1, value } = schemas.hourly.validate(req.query);
+        if (error1) return responses.badRequest(res, error1.message);
+        // location is in params and the rest are in query
+        const { error2, value: {location} } = locationAndMetricSchema.validate(req.params);
+        if (error2) return responses.badRequest(res, error2.message);
+        const { hours, unit } = value;
+        const cacheKey = `hourly:${location}:${unit}:${hours}`;
+    
+        // Check if the data is in Redis cache
+        const cachedData = await redisClient.get(cacheKey);
+        if (cachedData) {
+          console.log('Cache hit from here!');
+          return res.json(JSON.parse(cachedData));
+        }
+    
+        // Construct the Visual Crossing API URL
+        const apiKey = process.env.VISUAL_CROSSING_API_KEY;
+        const apiUrl = `${process.env.VISUAL_CROSSING_BASE_URL}/${location}?unitGroup=${unit}&include=hours&key=${apiKey}`;
+    
+        // Fetch data from Visual Crossing API
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          return responses.notFound(res, 'Error fetching data from Visual Crossing API' );
+        }
+    
+        const weatherData = await response.json();
+        const currentHour = new Date().getHours();
+        const hourlyForecast = weatherData.days[0].hours
+        .filter((hour) => {
+            const hourTime = parseInt(hour.datetime.split(':')[0], 10); // Extract hour from "HH:mm" format
+            return hourTime >= currentHour;
+        })
+        .slice(0, hours) // Limit the results to the specified number of hours
+        .map(hour => ({
+            time: hour.datetime,
+            temperature: hour.temp,
+            condition: hour.conditions,
+            humidity: hour.humidity,
+            wind_speed: hour.windspeed
+        }));
+    
+        const result = {
+          location,
+          forecast: hourlyForecast
+        };
+    
+        await redisClient.set(cacheKey, JSON.stringify(result), 'EX', 3600);
+    
+        return responses.success(res, "data fetched successfully", result);
+    
+    } catch (error) {
+        console.error(error);
+        return responses.internalServerError(res, 'Internal Server Error');
+    }
 };
 
 const forecastServices = {
