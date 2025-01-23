@@ -52,12 +52,12 @@ const dailyForecast = async (req, res) => {
         const { error2, value: {location} } = locationAndMetricSchema.validate(req.params);
         if (error2) return responses.badRequest(res, error2.message);
         const { days, unit } = value;
-        const cacheKey = `forecast:${location}:${unit}:${days}`;
+        const cacheKey = `forecast:daily:${location}:${unit}:${days}`;
         const cachedData = await redisClient.get(cacheKey);
 
         if (cachedData) {
-            console.log('Cache hit! from there');
-            return JSON.parse(cachedData);
+            console.log('Cache hit!');
+            return responses.success(res, "daily forecast fetched",JSON.parse(cachedData));
         }
 
         console.log('Cache miss. Fetching data from Visual Crossing API...');
@@ -71,7 +71,7 @@ const dailyForecast = async (req, res) => {
 
         const data = await response.json();
 
-        const forecast = data.days.map((day) => ({
+        const forecast = data.days.slice(0, days).map((day) => ({
             date: day.datetime,
             high_temp: day.tempmax,
             low_temp: day.tempmin,
@@ -82,7 +82,7 @@ const dailyForecast = async (req, res) => {
         // Cache the response in Redis for 1 hour
         await redisClient.set(cacheKey, JSON.stringify(forecast), 'EX', 3600);
 
-        forecast = { location: data.resolvedAddress, forecast };
+        // forecast = { location: data.resolvedAddress, forecast };
         return responses.success(res, 'Daily weather forecast retrieved successfully', forecast);
     } catch (error) {
         console.error('Error fetching daily forecast:', error);
@@ -104,7 +104,7 @@ const hourlyForecast = async (req, res) => {
         // Check if the data is in Redis cache
         const cachedData = await redisClient.get(cacheKey);
         if (cachedData) {
-          console.log('Cache hit from here!');
+          console.log('Cache hit!');
           return res.json(JSON.parse(cachedData));
         }
     
