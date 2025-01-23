@@ -7,8 +7,8 @@ const router = new Router();
 router.get("/:location", locationFunctions.getWeatherByLocation);
 
 router.get("/forecast/:location", forecastServices.forecastByLocation);
-router.get("/forecast/daily", () => {});
-router.get("/forecast/hourly", () => {});
+router.get("/forecast/daily", forecastServices.dailyForecast);
+router.get("/forecast/hourly", forecastServices.hourlyForecast);
 
 router.get("/historical/{location}", () => {});
 
