@@ -12,7 +12,6 @@ const getHistoricalWeather = async (req, res) => {
         if (error1) return responses.badRequest(res, error1.message);
 
         const { start_date, end_date, unit } = value;
-        console.log(unit);
         const cacheKey = `historical:${location}:${start_date}:${end_date}:${unit}`;
 
         const cachedData = await redisClient.get(cacheKey);

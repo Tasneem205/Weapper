@@ -3,6 +3,7 @@ import locationFunctions from "./services/location.service.js";
 import forecastServices from "./services/forecast.service.js";
 import getHistoricalWeather from "./services/history.service.js";
 import getAlerts from "./services/alerts.service.js";
+import settingServices from "./services/settings.service.js";
 
 const router = new Router();
 
@@ -19,8 +20,8 @@ router.get("/alerts/:location", getAlerts);
 router.get("/locations/saved", locationFunctions.getSavedLocations);
 router.post("/locations/:location/save", locationFunctions.saveLocation);
 
-router.get("/settings", () => {});
-router.post("/settings", () => {});
+router.get("/settings", settingServices.getSettings);
+router.post("/settings", settingServices.postSettings);
 
 router.get("/current}", () => {});
 
