@@ -7,7 +7,7 @@ import settingServices from "./services/settings.service.js";
 
 const router = new Router();
 
-router.get("/:location", locationFunctions.getWeatherByLocation);
+router.get("/byLocation/:location", locationFunctions.getWeatherByLocation);
 
 router.get("/forecast/:location", forecastServices.forecastByLocation);
 router.get("/forecast/daily/:location", forecastServices.dailyForecast);
@@ -20,8 +20,8 @@ router.get("/alerts/:location", getAlerts);
 router.get("/locations/saved", locationFunctions.getSavedLocations);
 router.post("/locations/:location/save", locationFunctions.saveLocation);
 
-router.get("/settings", settingServices.getSettings);
-router.post("/settings", settingServices.postSettings);
+router.get("/settings/:user_id", settingServices.getSettings);
+router.post("/settings/:user_id", settingServices.postSettings);
 
 router.get("/current}", () => {});
 

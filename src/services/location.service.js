@@ -95,9 +95,8 @@ const saveLocation = async (req, res) => {
 const getSavedLocations = async (req, res) => {
     const client = new MongoClient(process.env.URI);
     try {
-        const { user_id } = req.body;
-        if (!user_id)
-            return responses.badRequest(res, "user_id is required.");
+        const { error, user_id } = userSchema.validate(req.body);
+        if (error) return responses.badRequest(res, `validaiton error: ${error}`);
         await client.connect();
         if (!client) return responses.internalServerError(res);
         console.log('Connected successfully to MongoDB server');
