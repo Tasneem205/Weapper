@@ -9,6 +9,7 @@ import getSupportedCities from "./services/cities.service.js";
 import getRainChance from "./services/rain.service.js";
 import getUVIndex from "./services/uv.service.js";
 import travelPlannerForecast from "./services/travelplanner.service.js";
+import getAgricultureWeather from "./services/agriculture.service.js";
 
 const router = new Router();
 
@@ -38,7 +39,7 @@ router.get("/uv-index", getUVIndex);
 
 router.get("/travel-planner", travelPlannerForecast);
 
-router.get("/agriculture", () => {});
+router.get("/agriculture", getAgricultureWeather);
 
 router.get("/air-quality", () => {});
 
