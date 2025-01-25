@@ -5,6 +5,7 @@ import getHistoricalWeather from "./services/history.service.js";
 import getAlerts from "./services/alerts.service.js";
 import settingServices from "./services/settings.service.js";
 import getWeatherForMultipleLocations from "./services/current.service.js";
+import getSupportedCities from "./services/cities.service.js";
 
 const router = new Router();
 
@@ -26,7 +27,7 @@ router.post("/settings/:user_id", settingServices.postSettings);
 
 router.get("/current", getWeatherForMultipleLocations);
 
-router.get("/cities", () => {});
+router.get("/cities", getSupportedCities);
 
 router.get("/rain-chance", () => {});
 
