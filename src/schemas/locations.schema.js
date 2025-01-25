@@ -6,6 +6,8 @@ const locationAndMetricSchema = Joi.object({
   unit: Joi.string()
     .valid('metric', 'us', 'uk', 'ca') // Accept only these values
     .default('metric'), // Default to 'metric' if not provided
+  date: Joi.date().iso()
+    .default(() => new Date().toISOString().split('T')[0]),
 });
 
 export default locationAndMetricSchema;

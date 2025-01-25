@@ -6,6 +6,7 @@ import getAlerts from "./services/alerts.service.js";
 import settingServices from "./services/settings.service.js";
 import getWeatherForMultipleLocations from "./services/current.service.js";
 import getSupportedCities from "./services/cities.service.js";
+import getRainChance from "./services/rain.service.js";
 
 const router = new Router();
 
@@ -29,7 +30,7 @@ router.get("/current", getWeatherForMultipleLocations);
 
 router.get("/cities", getSupportedCities);
 
-router.get("/rain-chance", () => {});
+router.get("/rain-chance", getRainChance);
 
 router.get("/uv-index", () => {});
 
