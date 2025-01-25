@@ -4,6 +4,7 @@ import forecastServices from "./services/forecast.service.js";
 import getHistoricalWeather from "./services/history.service.js";
 import getAlerts from "./services/alerts.service.js";
 import settingServices from "./services/settings.service.js";
+import getWeatherForMultipleLocations from "./services/current.service.js";
 
 const router = new Router();
 
@@ -23,7 +24,7 @@ router.post("/locations/:location/save", locationFunctions.saveLocation);
 router.get("/settings/:user_id", settingServices.getSettings);
 router.post("/settings/:user_id", settingServices.postSettings);
 
-router.get("/current}", () => {});
+router.get("/current", getWeatherForMultipleLocations);
 
 router.get("/cities", () => {});
 
