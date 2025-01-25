@@ -2,12 +2,7 @@ import responses from "../helper/responses.js";
 import redisClient from "../middleWares/redisClient.js";
 import axios from "axios";
 import locationAndMetricSchema from "../schemas/locations.schema.js";
-
-const getNextDay = (date) => {
-    const currentDate = new Date(date);
-    currentDate.setDate(currentDate.getDate() + 1);
-    return currentDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
-};
+import getNextDay from "../helper/nextDay.js";
 
 const getRainChance = async (req, res) => {
     try {
