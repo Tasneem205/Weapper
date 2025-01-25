@@ -90,13 +90,14 @@ const saveLocation = async (req, res) => {
         await client.close();
         console.log('Connection to MongoDB server closed');
     }
-}
+};
 
 const getSavedLocations = async (req, res) => {
     const client = new MongoClient(process.env.URI);
     try {
-        const { error, user_id } = userSchema.validate(req.body);
-        if (error) return responses.badRequest(res, `validaiton error: ${error}`);
+        const { user_id } = req.body;
+        if (!user_id)
+            return responses.badRequest(res, "user_id is required.");
         await client.connect();
         if (!client) return responses.internalServerError(res);
         console.log('Connected successfully to MongoDB server');
@@ -112,7 +113,7 @@ const getSavedLocations = async (req, res) => {
         await client.close();
         console.log('Connection to MongoDB server closed');
     }
-}
+};
 
 const locationFunctions = {
     getWeatherByLocation,

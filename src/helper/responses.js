@@ -14,8 +14,8 @@ function notFound(res, message) {
   return res.status(404).json({ success: false, message });
 }
 
-function internalServerError(res) {
-  return res.status(500).json({ message: "Internal Server Error" });
+function internalServerError(res, message) {
+  return res.status(500).json({ defaultMessage: "Internal Server Error", message });
 }
 
 function unauthorized(res, message) {
