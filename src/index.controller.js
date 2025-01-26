@@ -13,6 +13,7 @@ import getAgricultureWeather from "./services/agriculture.service.js";
 import getAirQuality from "./services/airquality.service.js";
 import eventPlanner from "./services/eventsplanner.service.js";
 import getDroughtMonitor from "./services/droughtmonitor.service.js";
+import getEnergySaverRecommendations from "./services/energysaver.service.js";
 
 const router = new Router();
 
@@ -50,7 +51,7 @@ router.get("/events-planner", eventPlanner);
 
 router.get("/drought-monitor", getDroughtMonitor);
 
-router.get("/energy-saver", () => {});
+router.get("/energy-saver", getEnergySaverRecommendations);
 
 router.get("/seasonal-trends", () => {});
 
