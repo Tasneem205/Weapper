@@ -14,7 +14,6 @@ const getAgricultureWeather = async (req, res) => {
         const apiKey = process.env.VISUAL_CROSSING_API_KEY;
         const baseUrl = process.env.VISUAL_CROSSING_BASE_URL;
         const apiUrl = `${baseUrl}/${encodeURIComponent(location)}/${startDate.toISOString().split("T")[0]}/${endDate.toISOString().split("T")[0]}?unitGroup=${unit}&include=days&key=${apiKey}`;
-        console.log(apiUrl);
         // Fetch data from Visual Crossing API
         const APIresponse = await axios.get(apiUrl);
     

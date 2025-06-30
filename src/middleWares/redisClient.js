@@ -1,10 +1,9 @@
-import redis from "redis";
+import { Redis } from "@upstash/redis";
 
-const redisClient = redis.createClient({url: process.env.REDIS_URL});
-
-await redisClient.connect().catch((err) => {
-    console.error('Failed to connect to Redis:', err);
-  });
+const redisClient = new Redis({
+  url: process.env.REDIS_URL,
+  token: process.env.REDIS_TOKEN,
+});
 
 // function getOrSetCache(key, cb) {
 //     return new Promise((resolve, reject) => {

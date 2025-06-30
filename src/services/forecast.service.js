@@ -16,7 +16,7 @@ const forecastByLocation = async (req, res) => {
         const cachedData = await redisClient.get(cacheKey);
         if (cachedData) {
             console.log('Cache hit!');
-            return responses.success(res, "Weather forecast fetched successfully (from cache)",JSON.parse(cachedData));
+            return responses.success(res, "Weather forecast fetched successfully (from cache)", cachedData);
         }
 
         console.log('Cache miss! Fetching from Visual Crossing API...');
@@ -36,7 +36,7 @@ const forecastByLocation = async (req, res) => {
 
         const responseData = { location, forecast };
 
-        await redisClient.setEx(cacheKey, 3600, JSON.stringify(responseData));
+        await redisClient.setex(cacheKey, 3600, JSON.stringify(responseData));
 
         return responses.success(res, 'Weather forecast fetched successfully (from API)',responseData);
     } catch (error) {
@@ -58,7 +58,7 @@ const dailyForecast = async (req, res) => {
 
         if (cachedData) {
             console.log('Cache hit!');
-            return responses.success(res, "daily forecast fetched",JSON.parse(cachedData));
+            return responses.success(res, "daily forecast fetched", cachedData);
         }
 
         console.log('Cache miss. Fetching data from Visual Crossing API...');
@@ -81,7 +81,7 @@ const dailyForecast = async (req, res) => {
         }));
 
         // Cache the response in Redis for 1 hour
-        await redisClient.set(cacheKey, JSON.stringify(forecast), 'EX', 3600);
+        await redisClient.set(cacheKey, JSON.stringify(forecast), { ex: 3600 });
 
         // forecast = { location: data.resolvedAddress, forecast };
         return responses.success(res, 'Daily weather forecast retrieved successfully', forecast);
@@ -106,7 +106,7 @@ const hourlyForecast = async (req, res) => {
         const cachedData = await redisClient.get(cacheKey);
         if (cachedData) {
           console.log('Cache hit!');
-          return res.json(JSON.parse(cachedData));
+          return responses.success(res, "hourly forecast fetched", cachedData);
         }
     
         // Construct the Visual Crossing API URL

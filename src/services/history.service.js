@@ -39,7 +39,7 @@ const getHistoricalWeather = async (req, res) => {
             historical_data: historicalData,
         };
 
-        await redisClient.set(cacheKey, JSON.stringify(result), 'EX', 3600); // Cache for 1 hour
+        await redisClient.set(cacheKey, JSON.stringify(result), { ex: 3600 }); // Cache for 1 hour
 
         return responses.success(res, 'Historical data fetched successfully', result);
     } catch (error) {

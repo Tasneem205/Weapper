@@ -31,7 +31,7 @@ const getSeasonalTrends = async (req, res) => {
         const cachedData = await redisClient.get(cacheKey);
         if (cachedData) {
             console.log(`Cache hit for key: ${cacheKey}`);
-            return responses.success(res, JSON.parse(cachedData));
+            return responses.success(res, "Response found successfully", cachedData);
         }
 
         console.log(`Cache miss for key: ${cacheKey}`);
@@ -63,7 +63,7 @@ const getSeasonalTrends = async (req, res) => {
         };
 
         // Cache response for 24 hours
-        await redisClient.set(cacheKey, JSON.stringify(responseData), 'EX', 86400);
+        await redisClient.set(cacheKey, JSON.stringify(responseData), { ex: 86400 });
 
         return responses.success(res, responseData);
     } catch (error) {

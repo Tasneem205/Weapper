@@ -17,7 +17,7 @@ const getAirQuality = async (req, res) => {
     
         if (cachedData) {
             console.log(`Cache hit for key: ${cacheKey}`);
-            return responses.success(res, JSON.parse(cachedData));
+            return responses.success(res, cachedData);
         }
     
         console.log(`Cache miss for key: ${cacheKey}`);
@@ -79,7 +79,7 @@ const getAirQuality = async (req, res) => {
         };
     
         // Store the response in Redis cache for 1 hour
-        await redisClient.set(cacheKey, JSON.stringify(responseData), 'EX', 3600);
+        await redisClient.set(cacheKey, JSON.stringify(responseData), { ex: 3600 });
         return responses.success(res, responseData);
     } catch (error) {
         console.error(`Error fetching air quality data: ${error.message}`);

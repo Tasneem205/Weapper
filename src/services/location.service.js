@@ -16,8 +16,7 @@ const getWeatherByLocation = async (req, res) => {
         const cachedWeather = await redisClient.get(`${location}:${unit}`);
         if (cachedWeather) {
             console.log('Cache hit!');
-            const weatherData = JSON.parse(cachedWeather);
-            return responses.success(res, "Weather fetched successfully", weatherData);
+            return responses.success(res, "Weather fetched successfully", cachedWeather);
         }
         console.log('Cache miss! Fetching from Visual Crossing API...');
         const APIresponse = await axios.get(
@@ -41,9 +40,8 @@ const getWeatherByLocation = async (req, res) => {
             timestamp: new Date().toISOString(),
         };
         // save to cache
-        await redisClient.setEx(`${location}:${unit}`, 3600, JSON.stringify(data));
+        await redisClient.setex(`${location}:${unit}`, 3600, data);
         return responses.success(res, "Weather fetched successfully", data);
-        
     } catch (error) {
         console.log(`Faild somehow look \n ${error}`);
         return responses.internalServerError(res);

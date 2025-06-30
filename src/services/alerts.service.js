@@ -1,6 +1,5 @@
 import responses from '../helper/responses.js';
 import axios from 'axios';
-import redisClient from '../middleWares/redisClient.js';
 import locationAndMetricSchema from '../schemas/locations.schema.js';
 
 const getAlerts = async (req, res) => {

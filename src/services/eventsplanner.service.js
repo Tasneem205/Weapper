@@ -16,10 +16,10 @@ const eventPlanner = async (req, res) => {
         const cacheKey = `eventPlanner:${location}:${startDate.toISOString().split("T")[0]}:${endDate.toISOString().split("T")[0]}:${JSON.stringify(preferences)}`;
         const cachedData = await redisClient.get(cacheKey);
 
-        // if (cachedData) {
-        //     console.log(`Cache hit for key: ${cacheKey}`);
-        //     return responses.success(res, JSON.parse(cachedData));
-        // }
+        if (cachedData) {
+            console.log(`Cache hit for key: ${cacheKey}`);
+            return responses.success(res, cachedData);
+        }
 
         console.log(`Cache miss for key: ${cacheKey}`);
 
@@ -72,7 +72,7 @@ const eventPlanner = async (req, res) => {
         };
 
         // Store the result in Redis for 1 hour
-        await redisClient.set(cacheKey, JSON.stringify(responseData), 'EX', 3600);
+        await redisClient.set(cacheKey, JSON.stringify(responseData), { ex: 3600 });
 
         // Send the response
         return responses.success(res, responseData);

@@ -21,7 +21,7 @@ const getWeatherForMultipleLocations = async (req, res) => {
                 const cachedWeather = await redisClient.get(`${location}:${unit}`);
                 if (cachedWeather) {
                     console.log(`Cache hit for ${location}!`);
-                    weatherData[location] = JSON.parse(cachedWeather);
+                    weatherData[location] = cachedWeather;
                     continue;
                 }
 
@@ -54,7 +54,7 @@ const getWeatherForMultipleLocations = async (req, res) => {
                 };
 
                 // Save data to Redis cache
-                await redisClient.setEx(`${location}:${unit}`, 3600, JSON.stringify(data));
+                await redisClient.setex(`${location}:${unit}`, 3600, JSON.stringify(data));
                 weatherData[location] = data;
             } catch (error) {
                 console.log(`Failed to fetch weather for ${location}: ${error}`);

@@ -15,7 +15,7 @@ const getRainChance = async (req, res) => {
         const cachedData = await redisClient.get(cacheKey);
         if (cachedData) {
             console.log("Cache hit!");
-            return responses.success(res, "Rain chance fetched successfully", JSON.parse(cachedData));
+            return responses.success(res, "Rain chance fetched successfully", cachedData);
         }
 
         console.log("Cache miss! Fetching from Visual Crossing API...");
@@ -36,7 +36,7 @@ const getRainChance = async (req, res) => {
         };
 
         // Save to cache
-        await redisClient.setEx(cacheKey, 3600, JSON.stringify(responsePayload));
+        await redisClient.setex(cacheKey, 3600, JSON.stringify(responsePayload));
 
         return responses.success(res, "Rain chance fetched successfully", responsePayload);
     } catch (error) {

@@ -21,12 +21,12 @@ const getDroughtMonitor = async (req, res) => {
               ];
 
         const cacheKey = `droughtMonitor:${location}:${startDate}:${endDate}`;
-        // const cachedData = await redisClient.get(cacheKey);
+        const cachedData = await redisClient.get(cacheKey);
 
-        // if (cachedData) {
-        //     console.log(`Cache hit for key: ${cacheKey}`);
-        //     return responses.success(res, JSON.parse(cachedData));
-        // }
+        if (cachedData) {
+            console.log(`Cache hit for key: ${cacheKey}`);
+            return responses.success(res, cachedData);
+        }
 
         console.log(`Cache miss for key: ${cacheKey}`);
 
@@ -64,7 +64,7 @@ const getDroughtMonitor = async (req, res) => {
         };
 
         // Store the response in Redis cache for 1 hour
-        await redisClient.set(cacheKey, JSON.stringify(responseData), "EX", 3600);
+        await redisClient.set(cacheKey, JSON.stringify(responseData), { ex: 3600 });
 
         // Send response
         return responses.success(res, responseData);
