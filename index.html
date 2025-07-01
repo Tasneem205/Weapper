@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather API Documentation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Weather API Documentation</h1>
+
+    <!-- API Documentation -->
+    <section>
+      <h2>Overview</h2>
+      <p>
+        The Weather API provides weather forecast data for a specified location and temperature unit.
+        It uses Upstash Redis for caching and MongoDB Atlas for persistent storage, hosted on Vercel.
+        Click a category below to view its endpoints and test them.
+      </p>
+
+      <!-- Dynamically Generated Categories -->
+      <div id="endpoint-container"></div>
+    </section>
+
+    <!-- Load JavaScript -->
+    <script src="script.js"></script>
+  </div>
+</body>
+</html>
