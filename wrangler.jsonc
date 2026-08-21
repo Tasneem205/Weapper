@@ -1,5 +1,4 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "weapper",
   "main": "main.js",
   "compatibility_date": "2026-08-01",
