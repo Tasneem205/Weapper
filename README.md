@@ -32,6 +32,35 @@ Explore and test the **Weapper** API endpoints directly using either our interac
 | **`mongo-fallback`** | Secondary persistent storage hit via MongoDB | **~50ms – 80ms** |
 | **`external-api`** | Live third-party API fetch (OpenWeather / Visual Crossing) | **~300ms+** |
 
+## Tech Stack
+
+* **Runtime & Framework:** Node.js, Express.js
+* **Primary Cache (Tier 1):** Upstash Redis
+* **Database (Tier 2):** MongoDB Atlas
+* **Weather APIs:** OpenWeatherMap, Visual Crossing
+* **Docs & Testing:** Postman, GitHub Pages
+
+---
+
+### Data Flow & Caching Logic
+
+```text
+[ Client Request ] 
+        │
+        ▼
+[ Tier 1: Upstash Redis ] ── (Hit) ──► Return ~10ms Response
+        │
+     (Miss)
+        │
+        ▼
+[ Tier 2: MongoDB Atlas ] ── (Hit) ──► Re-cache in Redis ──► Return Response
+        │
+     (Miss)
+        │
+        ▼
+[ Upstream Weather API ] ──► Store in Mongo & Redis ──► Return Response
+```
+
 ## How to Install
 
 Follow these steps to set up and run Weapper locally.
