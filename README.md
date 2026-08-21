@@ -3,8 +3,6 @@
 
 Weather API wrapper service is a lightweight Weather API wrapper built with Node.js that speeds up response times and reduces third-party API calls using dual-layer caching with Redis and MongoDB. built as ALX backend specialization graduation project.
 
-Documentation published on postman: <https://documenter.getpostman.com/view/23533384/2sAYQgg8Th>
-
 ## Why Weapper?
 
 When relying on external third-party APIs (like weather services), backend systems face two main bottlenecks:
@@ -18,7 +16,7 @@ Weapper solves this by serving as an intelligent middleware caching layer. It in
 
 Explore and test the **Weapper** API endpoints directly using either our interactive web application or complete Postman collection.
 
-* **Live API Playground (GitHub Pages):** [Try it live](https://Tasneem205.github.io/weapper)  
+* **Live API Playground (GitHub Pages):** [Try it live](https://Tasneem205.github.io/Weapper)  
   *An interactive frontend built with HTML, CSS, and JavaScript allowing you to send live requests to the deployed API, inspect responses, and observe cache layer flags (`redis-cache`, `mongo-fallback`, or `external-api`) in real time.*
 
 * **Complete Postman Documentation:** [View Documentation](https://documenter.getpostman.com/view/23533384/2sAYQgg8Th)  
@@ -42,10 +40,10 @@ Follow these steps to set up and run Weapper locally.
 
 Ensure you have the following installed on your machine:
 
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [npm](https://www.npmjs.com/) (comes with Node.js)
-- A [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster (or local MongoDB instance)
-- An [Upstash Redis](https://upstash.com/) database (or local Redis server)
+* [Node.js](https://nodejs.org/) (v18 or higher)
+* [npm](https://www.npmjs.com/) (comes with Node.js)
+* A [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster (or local MongoDB instance)
+* An [Upstash Redis](https://upstash.com/) database (or local Redis server)
 
 ---
 
