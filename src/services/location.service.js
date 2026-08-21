@@ -49,7 +49,7 @@ const getWeatherByLocation = async (req, res) => {
 };
 
 const saveLocation = async (req, res) => {
-    const client = new MongoClient(process.env.URI);
+    const client = new MongoClient(process.env.MONGO_URI);
     try {
         const {error, value} = locationAndMetricSchema.validate(req.params);
         if (error) return responses.badRequest(res, `validaiton error: ${error}`);
@@ -61,7 +61,7 @@ const saveLocation = async (req, res) => {
         await client.connect();
         if (!client) return responses.internalServerError(res);
         console.log('Connected successfully to MongoDB server');
-        const db = client.db(process.env.DBName);
+        const db = client.db(process.env.MONGO_DB_NAME);
         const userCollection = db.collection('users');
         let user = await userCollection.findOne({ user_id });
         if (user) {
@@ -91,7 +91,7 @@ const saveLocation = async (req, res) => {
 };
 
 const getSavedLocations = async (req, res) => {
-    const client = new MongoClient(process.env.URI);
+    const client = new MongoClient(process.env.MONGO_URI);
     try {
         const { user_id } = req.body;
         if (!user_id)
@@ -99,7 +99,7 @@ const getSavedLocations = async (req, res) => {
         await client.connect();
         if (!client) return responses.internalServerError(res);
         console.log('Connected successfully to MongoDB server');
-        const db = client.db(process.env.DBName);
+        const db = client.db(process.env.MONGO_DB_NAME);
         const userCollection = db.collection('users');
         let user = await userCollection.findOne({ user_id });
         if (!user) return responses.notFound(res, "User not found");

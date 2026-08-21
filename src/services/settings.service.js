@@ -1,10 +1,9 @@
 import responses from "../helper/responses.js";
 import userSchema from "../schemas/user.schema.js";
-import settingSchema from "../schemas/setting.schema.js";
 import { MongoClient } from 'mongodb';
 
 const getSettings = async (req, res) => {
-    const client = new MongoClient(process.env.URI);
+    const client = new MongoClient(process.env.MONGO_URI);
     try {
         const { error, value: {user_id} } = userSchema.validate(req.params);
         if (error) return responses.badRequest(res, `validaiton error: ${error}`);
@@ -26,7 +25,7 @@ const getSettings = async (req, res) => {
 };
 
 const postSettings = async (req, res) => {
-    const client = new MongoClient(process.env.URI);
+    const client = new MongoClient(process.env.MONGO_URI);
     try {
         // Validate request params
         const { error1, value: { user_id } } = userSchema.validate(req.params);
@@ -39,7 +38,7 @@ const postSettings = async (req, res) => {
         await client.connect();
         if (!client) return responses.internalServerError(res);
         console.log('Connected successfully to MongoDB server');
-        const db = client.db(process.env.DBName);
+        const db = client.db(process.env.MONGO_DB_NAME);
         const userCollection = db.collection('users');
 
         // Find the user by user_id
