@@ -1,5 +1,6 @@
 {
-  "name": "weapper",
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "weapper-api",
   "main": "main.js",
   "compatibility_date": "2026-08-01",
   "compatibility_flags": [
